@@ -22,9 +22,14 @@ class CArreraTigerUI :
         self.__frameInstall = Frame(self.__screen,width=700,height=500,bg="white")
         # Label Frame Install
         labelInstall = Label(self.__frameInstall,text="Installation en cours",bg="white",fg="black",font=("arial","30"))
+        # Widget fenetre principal
+        labelTitle =  Label(self.__screen,text="Arrera Tiger",bg="white",fg="black",font=("arial","30"))
+        btnValider = Button(self.__screen,text="Installer",bg="white",fg="black",font=("arial","15"))
         # Affichage
         self.__screen.configure(menu=self.__topMenu)
         labelInstall.place(relx=0.5,rely=0.5,anchor="center")
+        btnValider.pack(side="bottom")
+        labelTitle.pack()
     
     def show(self):
         listeSoft = self.__objTiger.listSoft()
