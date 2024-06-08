@@ -2,6 +2,7 @@ from tkinter import*
 from objet.CArreraTiger import*
 from tkinter import filedialog 
 from tkinter.messagebox import*
+import threading as th
 
 class CArreraTigerUI :
     def __init__(self):
@@ -29,7 +30,7 @@ class CArreraTigerUI :
         labelInstall = Label(self.__frameInstall,text="Installation en cours",bg="white",fg="black",font=("arial","30"))
         # Widget fenetre principal
         labelTitle =  Label(self.__screen,text="Arrera Tiger",bg="white",fg="black",font=("arial","30"))
-        btnValider = Button(self.__screen,text="Installer",bg="white",fg="black",font=("arial","15"))
+        btnValider = Button(self.__screen,text="Installer",bg="white",fg="black",font=("arial","15"),command=self.__install)
         # Affichage
         self.__screen.configure(menu=self.__topMenu)
         labelInstall.place(relx=0.5,rely=0.5,anchor="center")
@@ -48,3 +49,17 @@ class CArreraTigerUI :
         folder = filedialog.askdirectory(title="Sélectionner un dossier")
         self.__fileConfig.EcritureJSON("file",folder)
         showinfo("Arrera : Tiger","Dossier enregistrer")
+    
+    def __install(self):
+        soft = self.__varSoft.get()
+        folder = self.__fileConfig.lectureJSON("file")
+        if (folder==""):
+            showerror("Arrera : Tiger","Aucun dossier n'a etais defini")
+        else :
+            self.__frameInstall.pack()
+            self.__screen.update()
+            theardInstall = th.Thread(target=self.__objTiger.install,args=(soft,"cache/"+soft+".zip",folder,))
+            theardInstall.start()
+            theardInstall.join()
+            self.__frameInstall.pack_forget()
+            showinfo("Arrera : Tiger","Logiciel installer")
