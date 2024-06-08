@@ -1,5 +1,7 @@
 from tkinter import*
 from objet.CArreraTiger import*
+from tkinter import filedialog 
+from tkinter.messagebox import*
 
 class CArreraTigerUI :
     def __init__(self):
@@ -12,11 +14,14 @@ class CArreraTigerUI :
         self.__screen.maxsize(700,500)
         self.__screen.minsize(700,500)
         self.__screen.configure(bg="white")
+        # Ouverture du fichier de config
+        self.__fileConfig = jsonWork()
+        self.__fileConfig.loadFile("tigerConfig.json")
         # Varriable
         self.__varSoft = StringVar(self.__screen)
         # Menu top 
         self.__topMenu = Menu(self.__screen)
-        self.__topMenu.add_command(label="Definir emplacement")
+        self.__topMenu.add_command(label="Definir emplacement",command=self.__addEmplacement)
         self.__topMenu.add_command(label="a propos")
         # Frame install
         self.__frameInstall = Frame(self.__screen,width=700,height=500,bg="white")
@@ -37,3 +42,9 @@ class CArreraTigerUI :
         menuSoft.place(relx=0.5,rely=0.5,anchor="center")
         self.__varSoft.set(listeSoft[0])
         self.__screen.mainloop()
+    
+    def __addEmplacement(self):
+        showinfo("Arrera : Tiger","Selectionner le dossier ou installer vos application Arrera")
+        folder = filedialog.askdirectory(title="Sélectionner un dossier")
+        self.__fileConfig.EcritureJSON("file",folder)
+        showinfo("Arrera : Tiger","Dossier enregistrer")
