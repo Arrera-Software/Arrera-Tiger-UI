@@ -3,15 +3,19 @@ from objet.CArreraTiger import*
 from tkinter import filedialog 
 from tkinter.messagebox import*
 import threading as th
+from PIL import Image, ImageTk
 
 class CArreraTigerUI :
     def __init__(self):
+        # var
+        self.__versionApp = "I2024-1.00"
+        self.__imagePath = "image/ArreraTiger.png" 
         # Objet Tiger
         self.__objTiger = CArreraTiger("https://raw.githubusercontent.com/Arrera-Software/Software-debot/main/arrerasoft.json")
         # Fenetre
         self.__screen = Tk()
         self.__screen.title("Arrera : Tiger")
-        self.__screen.iconphoto(False,PhotoImage(file="image/ArreraTiger.png"))
+        self.__screen.iconphoto(False,PhotoImage(file=self.__imagePath))
         self.__screen.maxsize(700,500)
         self.__screen.minsize(700,500)
         self.__screen.configure(bg="white")
@@ -23,7 +27,7 @@ class CArreraTigerUI :
         # Menu top 
         self.__topMenu = Menu(self.__screen)
         self.__topMenu.add_command(label="Definir emplacement",command=self.__addEmplacement)
-        self.__topMenu.add_command(label="a propos")
+        self.__topMenu.add_command(label="a propos",command=self.__Apropop)
         # Main Frame 
         self.__frameMain = Frame(self.__screen,width=700,height=500,bg="white")
         # Frame install
@@ -68,3 +72,31 @@ class CArreraTigerUI :
             self.__frameInstall.pack_forget()
             self.__frameMain.pack()
             showinfo("Arrera : Tiger","Logiciel installer")
+    
+    def __Apropop(self):
+        #Variable
+        nameApp = "Arrera Tiger"#Definir le nom de l'app
+        copyrightApp = "Copyright Arrera Software by Baptiste P 2023-2024"
+        color = "white"
+        #Creation de la fenetre
+        about = Toplevel()
+        about.title("A propos : "+nameApp)
+        about.maxsize(400,300)
+        about.minsize(400,300)
+        about.configure(bg=color)
+        about.iconphoto(False,PhotoImage(file=self.__imagePath))
+        #Traitement Image
+        icon = ImageTk.PhotoImage(Image.open(self.__imagePath).resize((100,100)))
+        #Label
+        labelIcon = Label(about,bg=color)
+        labelIcon.image_names = icon
+        labelIcon.configure(image=icon)
+        labelName = Label(about,text="\n"+nameApp+"\n",font=("arial","12"),bg=color)
+        labelVersion = Label(about,text=self.__versionApp+"\n",font=("arial","11"),bg=color)
+        labelCopyright = Label(about,text=copyrightApp,font=("arial","9"),bg=color)
+        #affichage
+        labelIcon.pack()
+        labelName.pack()
+        labelVersion.pack()
+        labelCopyright.pack()
+        about.mainloop()
