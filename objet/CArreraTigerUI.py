@@ -24,22 +24,25 @@ class CArreraTigerUI :
         self.__topMenu = Menu(self.__screen)
         self.__topMenu.add_command(label="Definir emplacement",command=self.__addEmplacement)
         self.__topMenu.add_command(label="a propos")
+        # Main Frame 
+        self.__frameMain = Frame(self.__screen,width=700,height=500,bg="white")
         # Frame install
         self.__frameInstall = Frame(self.__screen,width=700,height=500,bg="white")
         # Label Frame Install
         labelInstall = Label(self.__frameInstall,text="Installation en cours",bg="white",fg="black",font=("arial","30"))
         # Widget fenetre principal
-        labelTitle =  Label(self.__screen,text="Arrera Tiger",bg="white",fg="black",font=("arial","30"))
-        btnValider = Button(self.__screen,text="Installer",bg="white",fg="black",font=("arial","15"),command=self.__install)
+        labelTitle =  Label(self.__frameMain,text="Arrera Tiger",bg="white",fg="black",font=("arial","30"))
+        btnValider = Button(self.__frameMain,text="Installer",bg="white",fg="black",font=("arial","15"),command=self.__install)
         # Affichage
         self.__screen.configure(menu=self.__topMenu)
+        self.__frameMain.pack()
         labelInstall.place(relx=0.5,rely=0.5,anchor="center")
-        btnValider.pack(side="bottom")
-        labelTitle.pack()
+        btnValider.place(relx=0.5, rely=1.0, anchor="s")  
+        labelTitle.place(relx=0.5, rely=0.0, anchor="n") 
     
     def show(self):
         listeSoft = self.__objTiger.listSoft()
-        menuSoft = OptionMenu(self.__screen,self.__varSoft,*listeSoft)
+        menuSoft = OptionMenu(self.__frameMain,self.__varSoft,*listeSoft)
         menuSoft.place(relx=0.5,rely=0.5,anchor="center")
         self.__varSoft.set(listeSoft[0])
         self.__screen.mainloop()
@@ -56,10 +59,12 @@ class CArreraTigerUI :
         if (folder==""):
             showerror("Arrera : Tiger","Aucun dossier n'a etais defini")
         else :
+            self.__frameMain.pack_forget()
             self.__frameInstall.pack()
             self.__screen.update()
             theardInstall = th.Thread(target=self.__objTiger.install,args=(soft,"cache/"+soft+".zip",folder,))
             theardInstall.start()
             theardInstall.join()
             self.__frameInstall.pack_forget()
+            self.__frameMain.pack()
             showinfo("Arrera : Tiger","Logiciel installer")
